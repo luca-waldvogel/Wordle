@@ -1,2 +1,2 @@
 // Example config file
-window.API_BASE_URL = "http://localhost:5000";
+window.API_BASE_URL = "https://wordle-backend-st1q.onrender.com";
