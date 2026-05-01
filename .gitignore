@@ -16,5 +16,4 @@ backend/node_modules/
 frontend/config.js
 
 # Ignore documentation files
-README.md
 TODO.md
