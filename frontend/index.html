@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wordle Starter</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Wordle Starter</h1>
+      <p class="subtitle">Simple full-stack demo with login + leaderboard</p>
+
+      <div id="message" class="message"></div>
+
+      <section id="auth-section" class="card">
+        <div class="auth-tabs">
+          <button id="login-tab" class="tab active" type="button">Login</button>
+          <button id="register-tab" class="tab" type="button">Register</button>
+        </div>
+
+        <form id="login-form" class="auth-form">
+          <label>
+            Email
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" autocomplete="current-password" required />
+          </label>
+          <button type="submit">Login</button>
+        </form>
+
+        <div class="auth-switch">
+          <span>Don't have an account?</span>
+          <button id="to-register" type="button" class="link-button">Register</button>
+        </div>
+
+        <form id="register-form" class="auth-form hidden" hidden>
+          <label>
+            Username
+            <input type="text" name="username" autocomplete="username" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" autocomplete="new-password" required />
+          </label>
+          <button type="submit">Register</button>
+        </form>
+
+        <div class="auth-switch hidden" id="login-switch" hidden>
+          <span>Already have an account?</span>
+          <button id="to-login" type="button" class="link-button">Login</button>
+        </div>
+      </section>
+
+      <section id="game-section" class="hidden">
+        <div class="game-header">
+          <div>Logged in as <span id="current-user"></span></div>
+          <button id="logout-btn" type="button">Logout</button>
+        </div>
+
+        <div class="game-layout">
+          <div class="game-left">
+            <div class="controls">
+              <button id="new-game-btn" type="button">New Game</button>
+            </div>
+
+            <div id="board" class="board"></div>
+            <div id="keyboard" class="keyboard"></div>
+          </div>
+
+          <div class="game-right">
+            <div class="score-card">
+              <h2>Current</h2>
+              <div class="score-row">
+                <span>Score</span>
+                <strong id="score-value">0</strong>
+              </div>
+              <div class="score-row">
+                <span>Attempts</span>
+                <strong id="attempts-value">0</strong>
+              </div>
+              <div class="score-row">
+                <span>User</span>
+                <strong id="score-username">-</strong>
+              </div>
+            </div>
+
+            <div class="leaderboard">
+              <h2>Leaderboard</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Score</th>
+                    <th>Attempts</th>
+                    <th>Result</th>
+                  </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+<script src="config.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
+
