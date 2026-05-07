@@ -111,6 +111,19 @@ npm start
 
 ---
 
+## Tests
+
+The backend has 10 Jest unit tests covering `evaluateGuess`, `authMiddleware`, and `seedWords`. They only depend on the backend npm packages, and they do not require MongoDB because the database calls are mocked.
+
+Run them from `backend/`:
+
+```bash
+npm install
+npm test
+```
+
+---
+
 ### 6. Open the app in your browser:
 
 ```text
