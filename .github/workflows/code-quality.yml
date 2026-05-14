@@ -1,0 +1,30 @@
+name: Code Quality
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install lint and format tools
+        run: npm install --no-save eslint@9.27.0 prettier@3.5.3
+
+      - name: Run ESLint
+        run: npx eslint "backend/src/**/*.js" "backend/test/**/*.js" "frontend/**/*.js"
+
+      - name: Check formatting with Prettier
+        run: npx prettier --check "backend/src/**/*.js" "backend/test/**/*.js" "frontend/**/*.js" "frontend/**/*.html" "frontend/**/*.css"
