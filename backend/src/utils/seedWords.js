@@ -1,4 +1,5 @@
 const Word = require("../models/Word");
+const { logInfo } = require("./logger");
 
 // Seed a small list of simple 5-letter words
 const seedList = [
@@ -31,5 +32,5 @@ module.exports = async function seedWords() {
   }
 
   await Word.insertMany(seedList.map((value) => ({ value })));
-  console.log("Seeded word list");
+  logInfo("Seeded word list", { wordCount: seedList.length });
 };

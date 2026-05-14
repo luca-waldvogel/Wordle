@@ -7,14 +7,17 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const gameRoutes = require("./routes/game");
 const seedWords = require("./utils/seedWords");
+const { logInfo, logError } = require("./utils/logger");
 
 dotenv.config();
 
 const requiredEnv = ["MONGO_URI", "JWT_SECRET"];
 const missing = requiredEnv.filter((key) => !process.env[key]);
 if (missing.length > 0) {
-  console.error(`Missing required env vars: ${missing.join(", ")}`);
-  console.error("Create backend/.env based on backend/.env.example");
+  logError("Missing required environment variables", { missing });
+  logError("Environment setup required", {
+    messageDetail: "Create backend/.env based on backend/.env.example",
+  });
   process.exit(1);
 }
 
@@ -42,21 +45,21 @@ app.get("/api/health", (req, res) => {
 async function startServer() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB connected");
+    logInfo("MongoDB connected");
   } catch (error) {
-    console.error("Failed to connect to MongoDB:", error.message);
+    logError("Failed to connect to MongoDB", { errorMessage: error.message });
     process.exit(1);
   }
 
   try {
     await seedWords();
   } catch (error) {
-    console.error("Failed to seed words:", error.message);
+    logError("Failed to seed words", { errorMessage: error.message });
     process.exit(1);
   }
 
   app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    logInfo("Server started", { port: PORT });
   });
 }
 

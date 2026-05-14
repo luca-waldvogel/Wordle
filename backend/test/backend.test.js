@@ -145,7 +145,12 @@ describe("seedWords", () => {
     expect(insertSpy).toHaveBeenCalledTimes(1);
     expect(insertSpy.mock.calls[0][0]).toHaveLength(20);
     expect(insertSpy.mock.calls[0][0][0]).toEqual({ value: "apple" });
-    expect(logSpy).toHaveBeenCalledWith("Seeded word list");
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(logSpy.mock.calls[0][0])).toMatchObject({
+      level: "info",
+      message: "Seeded word list",
+      wordCount: 20,
+    });
   });
 
   test("skips insertion when words already exist", async () => {
