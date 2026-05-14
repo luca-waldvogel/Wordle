@@ -27,10 +27,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "https://wordle-qjbl.onrender.com",
-      "https://wordle-frontendluca.onrender.com",
-    ],
+    origin: "https://wordle-qjbl.onrender.com",
   }),
 );
 
