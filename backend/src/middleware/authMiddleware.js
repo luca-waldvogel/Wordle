@@ -13,6 +13,7 @@ module.exports = function authMiddleware(req, res, next) {
     req.user = { id: decoded.id, username: decoded.username, email: decoded.email };
     return next();
   } catch (error) {
+    console.log("Token verification failed:", error);
     return res.status(401).json({ message: "Invalid token." });
   }
 };

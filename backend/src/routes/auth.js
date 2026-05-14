@@ -26,6 +26,7 @@ router.post("/register", async (req, res) => {
 
     return res.status(201).json({ message: "Registration successful. Please log in." });
   } catch (error) {
+    console.log("Registration failed:", error);
     return res.status(500).json({ message: "Registration failed." });
   }
 });
@@ -55,6 +56,7 @@ router.post("/login", async (req, res) => {
 
     return res.json({ token, username: user.username, email: user.email });
   } catch (error) {
+    console.log("Login failed:", error);
     return res.status(500).json({ message: "Login failed." });
   }
 });

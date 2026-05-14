@@ -15,6 +15,7 @@ router.get("/new", authMiddleware, async (req, res) => {
     const word = words[0].value;
     return res.json({ word, length: word.length });
   } catch (error) {
+    console.log("Failed to start a new game:", error);
     return res.status(500).json({ message: "Failed to start a new game." });
   }
 });
@@ -38,6 +39,7 @@ router.post("/result", authMiddleware, async (req, res) => {
 
     return res.status(201).json({ id: result._id, score: safeScore });
   } catch (error) {
+    console.log("Failed to save game result:", error);
     return res.status(500).json({ message: "Failed to save game result." });
   }
 });
@@ -51,6 +53,7 @@ router.get("/leaderboard", authMiddleware, async (req, res) => {
 
     return res.json({ results });
   } catch (error) {
+    console.log("Failed to load leaderboard:", error);
     return res.status(500).json({ message: "Failed to load leaderboard." });
   }
 });

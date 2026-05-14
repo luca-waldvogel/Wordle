@@ -379,6 +379,7 @@ async function restoreSession() {
     await startNewGame();
     await loadLeaderboard();
   } catch (error) {
+    console.log("Failed to restore session:", error);
     setToken(null);
     hideGame();
     updateScoreCard();

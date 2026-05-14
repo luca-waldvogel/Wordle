@@ -19,12 +19,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
 
-      - name: Install lint and format tools
-        run: npm install --no-save eslint@9.27.0 prettier@3.5.3
+      - name: Install root dependencies
+        run: npm ci
 
       - name: Run ESLint
-        run: npx eslint "backend/src/**/*.js" "backend/test/**/*.js" "frontend/**/*.js"
+        run: npm run lint
 
       - name: Check formatting with Prettier
-        run: npx prettier --check "backend/src/**/*.js" "backend/test/**/*.js" "frontend/**/*.js" "frontend/**/*.html" "frontend/**/*.css"
+        run: npm run format:check
