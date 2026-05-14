@@ -1,5 +1,7 @@
 # Wordle Starter
 
+> The repository is linked to a [Jira Board](https://lucabenjaminwaldvogel.atlassian.net/jira/software/projects/WOR/boards/34) but access is needed.
+
 Simple full-stack Wordle app.
 
 - Frontend: HTML, CSS, JavaScript
