@@ -2,6 +2,7 @@ const express = require("express");
 const Word = require("../models/Word");
 const GameResult = require("../models/GameResult");
 const authMiddleware = require("../middleware/authMiddleware");
+const { logInfo, logError, serializeError } = require("../utils/logger");
 
 const router = express.Router();
 
@@ -9,15 +10,27 @@ router.get("/new", authMiddleware, async (req, res) => {
   try {
     const words = await Word.aggregate([{ $sample: { size: 1 } }]);
     if (!words.length) {
+      logError("Failed to start new game", {
+        userId: req.user.id,
+        reason: "no_words_available",
+      });
       return res
         .status(500)
         .json({ message: "No words available in database." });
     }
 
     const word = words[0].value;
+    logInfo("Game started", {
+      userId: req.user.id,
+      username: req.user.username,
+      wordLength: word.length,
+    });
     return res.json({ word, length: word.length });
   } catch (error) {
-    console.log("Failed to start a new game:", error);
+    logError("Failed to start new game", {
+      userId: req.user.id,
+      ...serializeError(error),
+    });
     return res.status(500).json({ message: "Failed to start a new game." });
   }
 });
@@ -30,6 +43,10 @@ router.post("/result", authMiddleware, async (req, res) => {
       typeof attemptsUsed !== "number" ||
       !targetWord
     ) {
+      logError("Failed to save game result", {
+        userId: req.user.id,
+        reason: "invalid_payload",
+      });
       return res.status(400).json({ message: "Invalid game result." });
     }
 
@@ -44,9 +61,21 @@ router.post("/result", authMiddleware, async (req, res) => {
       score: safeScore,
     });
 
+    logInfo("Game finished", {
+      userId: req.user.id,
+      username: req.user.username,
+      resultId: result._id.toString(),
+      won,
+      attemptsUsed,
+      score: safeScore,
+    });
+
     return res.status(201).json({ id: result._id, score: safeScore });
   } catch (error) {
-    console.log("Failed to save game result:", error);
+    logError("Failed to save game result", {
+      userId: req.user.id,
+      ...serializeError(error),
+    });
     return res.status(500).json({ message: "Failed to save game result." });
   }
 });
@@ -60,7 +89,10 @@ router.get("/leaderboard", authMiddleware, async (req, res) => {
 
     return res.json({ results });
   } catch (error) {
-    console.log("Failed to load leaderboard:", error);
+    logError("Failed to load leaderboard", {
+      userId: req.user.id,
+      ...serializeError(error),
+    });
     return res.status(500).json({ message: "Failed to load leaderboard." });
   }
 });
