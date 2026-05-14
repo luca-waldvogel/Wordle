@@ -8,8 +8,7 @@ const gameResultSchema = new mongoose.Schema(
     targetWord: { type: String, required: true, trim: true },
     score: { type: Number, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("GameResult", gameResultSchema);
-

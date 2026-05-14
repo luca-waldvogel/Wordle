@@ -149,7 +149,9 @@ function clearKeyboardStyles() {
 }
 
 function updateCell(row, col, value, status) {
-  const cell = boardEl.querySelector(`.cell[data-row='${row}'][data-col='${col}']`);
+  const cell = boardEl.querySelector(
+    `.cell[data-row='${row}'][data-col='${col}']`,
+  );
   if (!cell) return;
   cell.textContent = value ? value.toUpperCase() : "";
   cell.classList.remove("correct", "present", "absent");
@@ -313,13 +315,20 @@ async function finishGame(won) {
   }
   const attemptsUsed = currentRow + 1;
   currentScore = calculateScore();
-  setMessage(won ? "You won!" : `You lost. The word was ${targetWord.toUpperCase()}.`);
+  setMessage(
+    won ? "You won!" : `You lost. The word was ${targetWord.toUpperCase()}.`,
+  );
   updateScoreCard();
 
   try {
     await apiRequest("/api/game/result", {
       method: "POST",
-      body: JSON.stringify({ won, attemptsUsed, targetWord, score: currentScore }),
+      body: JSON.stringify({
+        won,
+        attemptsUsed,
+        targetWord,
+        score: currentScore,
+      }),
     });
     await loadLeaderboard();
   } catch (error) {
@@ -510,4 +519,3 @@ buildKeyboard();
 updateScoreCard();
 restoreSession();
 setAuthMode("login");
-

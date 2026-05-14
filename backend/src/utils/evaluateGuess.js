@@ -24,4 +24,3 @@ module.exports = function evaluateGuess(guess, target) {
 
   return result;
 };
-

@@ -9,7 +9,9 @@ router.get("/new", authMiddleware, async (req, res) => {
   try {
     const words = await Word.aggregate([{ $sample: { size: 1 } }]);
     if (!words.length) {
-      return res.status(500).json({ message: "No words available in database." });
+      return res
+        .status(500)
+        .json({ message: "No words available in database." });
     }
 
     const word = words[0].value;
@@ -23,11 +25,16 @@ router.get("/new", authMiddleware, async (req, res) => {
 router.post("/result", authMiddleware, async (req, res) => {
   try {
     const { won, attemptsUsed, targetWord, score } = req.body;
-    if (typeof won !== "boolean" || typeof attemptsUsed !== "number" || !targetWord) {
+    if (
+      typeof won !== "boolean" ||
+      typeof attemptsUsed !== "number" ||
+      !targetWord
+    ) {
       return res.status(400).json({ message: "Invalid game result." });
     }
 
-    const safeScore = typeof score === "number" ? Math.max(0, Math.floor(score)) : 0;
+    const safeScore =
+      typeof score === "number" ? Math.max(0, Math.floor(score)) : 0;
 
     const result = await GameResult.create({
       username: req.user.username,
