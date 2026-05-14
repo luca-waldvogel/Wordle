@@ -33,4 +33,3 @@ module.exports = async function seedWords() {
   await Word.insertMany(seedList.map((value) => ({ value })));
   console.log("Seeded word list");
 };
-

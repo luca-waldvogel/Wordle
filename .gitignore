@@ -12,7 +12,7 @@
 /dataSources.local.xml
 
 backend/.env
-backend/node_modules/
+node_modules/
 frontend/config.js
 
 # Ignore documentation files

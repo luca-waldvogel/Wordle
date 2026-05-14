@@ -1,0 +1,13 @@
+{
+  "name": "wordle",
+  "private": true,
+  "scripts": {
+    "lint": "eslint \"backend/src/**/*.js\" \"backend/test/**/*.js\" \"frontend/**/*.js\"",
+    "format:check": "prettier --check \"backend/src/**/*.js\" \"backend/test/**/*.js\" \"frontend/**/*.js\" \"frontend/**/*.html\" \"frontend/**/*.css\"",
+    "format": "prettier --write \"backend/src/**/*.js\" \"backend/test/**/*.js\" \"frontend/**/*.js\" \"frontend/**/*.html\" \"frontend/**/*.css\""
+  },
+  "devDependencies": {
+    "eslint": "9.27.0",
+    "prettier": "3.5.3"
+  }
+}
