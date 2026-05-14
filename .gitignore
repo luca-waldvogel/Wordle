@@ -12,6 +12,7 @@
 /dataSources.local.xml
 
 backend/.env
+backend/.env.docker
 node_modules/
 frontend/config.js
 
