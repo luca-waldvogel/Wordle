@@ -6,7 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "start": "node src/index.js",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand test/backend.test.js",
+    "test:integration": "jest --runInBand test/integration.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
