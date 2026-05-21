@@ -1,11 +1,8 @@
 name: Backend Tests
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
+  push:
+  workflow_dispatch:
 
 jobs:
   backend-tests:
