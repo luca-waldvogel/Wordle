@@ -11,7 +11,7 @@ function createApp() {
   app.use(express.json());
   app.use(
     cors({
-      origin: process.env.FRONTEND_URL || "http://localhost:5500",
+      origin: process.env.FRONTEND_URL || "http://localhost:5000",
     }),
   );
 
