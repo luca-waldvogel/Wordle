@@ -1,5 +1,3 @@
-const { execFileSync } = require("child_process");
-const net = require("net");
 const mongoose = require("mongoose");
 
 const User = require("../src/models/User");
@@ -13,74 +11,9 @@ const {
 
 jest.setTimeout(60000);
 
-let dockerContainerName;
 let mongoUri;
 let server;
 let baseUrl;
-
-function findOpenPort() {
-  return new Promise((resolve, reject) => {
-    const probe = net.createServer();
-
-    probe.listen(0, "127.0.0.1", () => {
-      const { port } = probe.address();
-      probe.close(() => resolve(port));
-    });
-
-    probe.on("error", reject);
-  });
-}
-
-function dockerAvailable() {
-  try {
-    execFileSync("docker", ["version"], { stdio: "ignore" });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function startMongoContainer() {
-  if (!dockerAvailable()) {
-    throw new Error(
-      "Integration tests require either MONGO_URI or a local Docker daemon.",
-    );
-  }
-
-  const port = await findOpenPort();
-  dockerContainerName = `wordle-int-${Date.now()}`;
-
-  execFileSync(
-    "docker",
-    [
-      "run",
-      "--detach",
-      "--rm",
-      "--name",
-      dockerContainerName,
-      "--publish",
-      `${port}:27017`,
-      "mongo:7",
-    ],
-    { stdio: "ignore" },
-  );
-
-  return `mongodb://127.0.0.1:${port}/wordle_integration_test`;
-}
-
-async function stopMongoContainer() {
-  if (!dockerContainerName) {
-    return;
-  }
-
-  try {
-    execFileSync("docker", ["stop", dockerContainerName], { stdio: "ignore" });
-  } catch {
-    // Ignore cleanup failures so Jest can report the real test result.
-  }
-
-  dockerContainerName = undefined;
-}
 
 async function waitForDatabase(uri) {
   const timeoutAt = Date.now() + 30000;
@@ -138,7 +71,10 @@ async function createUserAndLogin({
 
 beforeAll(async () => {
   process.env.JWT_SECRET = process.env.JWT_SECRET || "integration-test-secret";
-  mongoUri = process.env.MONGO_URI || (await startMongoContainer());
+  mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    throw new Error("Integration tests require MONGO_URI to be set.");
+  }
   process.env.MONGO_URI = mongoUri;
 
   await waitForDatabase(mongoUri);
@@ -176,7 +112,6 @@ afterAll(async () => {
   }
 
   await mongoose.disconnect();
-  await stopMongoContainer();
 });
 
 describe("integration: auth flow", () => {
