@@ -195,7 +195,9 @@ describe("integration: auth flow", () => {
       email: "alice@example.com",
     });
 
-    const storedUser = await User.findOne({ email: "alice@example.com" }).lean();
+    const storedUser = await User.findOne({
+      email: "alice@example.com",
+    }).lean();
     expect(storedUser).toMatchObject({
       username: "alice",
       email: "alice@example.com",
@@ -258,8 +260,7 @@ describe("integration: game flow", () => {
       "bob",
     ]);
     expect(leaderboard.body.results.map((entry) => entry.score)).toEqual([
-      180,
-      120,
+      180, 120,
     ]);
   });
 });
