@@ -1,4 +1,4 @@
-name: Build and Deploy Backend Docker Image
+name: Build and Deploy Docker Images
 
 on:
   push:
@@ -24,11 +24,20 @@ jobs:
           username: OgYYRe
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build backend Docker image
+      - name: Build backend image
         run: docker build -t ghcr.io/ogyyre/wordle-backend:latest ./backend
 
-      - name: Push backend Docker image
+      - name: Push backend image
         run: docker push ghcr.io/ogyyre/wordle-backend:latest
 
-      - name: Trigger Render deploy
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      - name: Build frontend image
+        run: docker build -t ghcr.io/ogyyre/wordle-frontend:latest ./frontend
+
+      - name: Push frontend image
+        run: docker push ghcr.io/ogyyre/wordle-frontend:latest
+
+      - name: Trigger backend deploy on Render
+        run: curl -X POST ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK_URL }}
+
+      - name: Trigger frontend deploy on Render
+        run: curl -X POST ${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK_URL }}
