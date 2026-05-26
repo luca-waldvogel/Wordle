@@ -1,56 +1,133 @@
-# Wordle Starter
+# Wordle
 
-> The repository is linked to a [Jira Board](https://lucabenjaminwaldvogel.atlassian.net/jira/software/projects/WOR/boards/34) but access is needed.
+Dieses Projekt ist eine einfache Full-Stack-Umsetzung eines Wordle-Spiels mit Benutzerverwaltung, JWT-Authentifizierung, Persistenz in MongoDB sowie automatisierter Qualitätssicherung über GitHub Actions.
 
-Simple full-stack Wordle app.
+## Projektüberblick
 
-- Frontend: HTML, CSS, JavaScript
-- Backend: Node.js + Express
-- Database: MongoDB
-- Auth: JWT
+Die Anwendung besteht aus einem statischen Frontend und einem Node.js-Backend. Das Frontend kommuniziert über HTTP mit dem Backend. Das Backend stellt Authentifizierungs- und Spiellogik-Endpoints bereit, speichert Benutzer und Spielergebnisse in MongoDB und befüllt die Wortliste beim Start automatisch.
 
----
-
-## Folder Structure
+## Projektstruktur
 
 ```text
-frontend/
-  index.html
-  style.css
-  script.js
-  config.example.js
-
-backend/
-  src/
-  .env.example
-  package.json
-
-README.md
+Wordle/
+|-- .github/
+|   `-- workflows/
+|       |-- deploy.yml
+|       |-- backend-tests.yml
+|       |-- code-quality.yml
+|       `-- integration-tests.yml
+|-- backend/
+|   |-- src/
+|   |   |-- middleware/
+|   |   |-- models/
+|   |   |-- routes/
+|   |   |-- utils/
+|   |   |-- app.js
+|   |   |-- index.js
+|   |   `-- server.js
+|   |-- test/
+|   |   |-- backend.test.js
+|   |   `-- integration.test.js
+|   |-- Dockerfile
+|   |-- Dockerfile.integration
+|   |-- .env.example
+|   |-- .env.docker.example
+|   `-- package.json
+|-- frontend/
+|   |-- index.html
+|   |-- style.css
+|   |-- script.js
+|   `-- config.example.js
+|-- package.json
+`-- README.md
 ```
 
----
+Grobe Einordnung der wichtigsten Bereiche:
 
-## Local Setup
+- `frontend/`: Benutzeroberfläche mit HTML, CSS und Vanilla JavaScript
+- `backend/src/routes/`: API-Endpunkte für Authentifizierung und Spielablauf
+- `backend/src/models/`: Mongoose-Modelle für `User`, `Word` und `GameResult`
+- `backend/src/utils/`: Hilfsfunktionen wie Wortbewertung, Logging und Seed-Daten
+- `backend/test/`: Unit- und Integrationstests
+- `.github/workflows/`: CI-Pipelines für Qualitätssicherung, Testautomatisierung und Deployment
 
-### 1. Clone repository
+## Verwendete Tools und Technologien
+
+### Backend
+
+- `Node.js`: Laufzeitumgebung des Servers
+- `Express`: Web-Framework für REST-Endpunkte und statische Auslieferung des Frontends
+- `MongoDB`: Datenbank für Benutzer, Wörter und Spielresultate
+- `Mongoose`: ODM für die Anbindung von MongoDB
+- `jsonwebtoken`: Erstellung und Verifikation von JWT-Tokens
+- `bcryptjs`: Hashing von Passwörtern
+- `dotenv`: Laden der Umgebungsvariablen aus `.env`
+- `cors`: Konfiguration von Cross-Origin Requests
+
+### Frontend
+
+- `HTML5`: Seitenstruktur
+- `CSS3`: Styling
+- `Vanilla JavaScript`: Spiellogik im Browser und API-Kommunikation
+
+### Qualitätssicherung und Dev-Tools
+
+- `Jest`: Unit- und Integrationstests
+- `ESLint`: statische Codeanalyse
+- `Prettier`: Formatprüfung
+- `Docker`: isolierte Ausführung der Integrationstests
+- `GitHub Actions`: automatisierte Pipeline bei Pushes
+- `Render`: Deployment Server
+
+## Benötigte SDKs, Laufzeiten und Treiber
+
+Für lokale Entwicklung und Ausführung werden folgende Komponenten benötigt:
+
+- `Node.js 20+`
+- `npm`
+- `MongoDB`
+- `Docker Desktop` oder eine vergleichbare Docker-Installation für die containerisierten Integrationstests
+
+Hinweise zu Treibern und Anbindung:
+
+- Ein separater Datenbanktreiber muss nicht manuell installiert werden, da die MongoDB-Anbindung über das npm-Paket `mongoose` erfolgt.
+- Unter Windows sollte für Docker der Docker-Engine-Dienst laufen.
+- Für eine lokale MongoDB-Installation muss der MongoDB-Dienst gestartet sein, bevor das Backend verbunden werden kann.
+
+## Installation und Ausführung
+
+### 1. Repository klonen
 
 ```bash
-git clone <repo-url>
-cd <project-folder>
+git clone <repository-url>
+cd Wordle
 ```
 
----
+### 2. Root-Abhängigkeiten installieren
 
-### 2. Create backend environment file
+Diese Abhängigkeiten werden für Linting und Formatprüfung benötigt.
+
+```bash
+npm install
+```
+
+### 3. Backend-Abhängigkeiten installieren
 
 ```bash
 cd backend
-cp .env.example .env
+npm install
 ```
 
-#### Edit `.env`
+### 4. Backend-Konfiguration anlegen
 
-##### Option 1 - Local MongoDB
+Die Datei `.env` und `.env.docker` wird auf Basis der Vorlage erstellt:
+
+```bash
+copy .env.example .env
+copy .env.docker.example .env.docker
+```
+
+Beispielinhalt:
 
 ```env
 PORT=5000
@@ -58,126 +135,168 @@ MONGO_URI=mongodb://localhost:27017/wordle
 JWT_SECRET=your_secret_here
 ```
 
-JWT_SECRET can be any random string, it is used to sign the JWT tokens for authentication. For production, use a strong secret and keep it private.
+Erläuterung:
 
-You can generate a secure secret with:
+- `PORT`: Port des Backends
+- `MONGO_URI`: Verbindungszeichenfolge zur MongoDB
+- `JWT_SECRET`: geheimer Schlüssel für die Signierung der Tokens
 
-```bash
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-```
+### 5. Frontend-Konfiguration anlegen
 
-Run the command in your terminal and copy the output into the JWT_SECRET variable.
-
-##### Option 2 - MongoDB Atlas (recommended)
-
-```env
-PORT=5000
-MONGO_URI=mongodb+srv://your-user:your-password@your-cluster.mongodb.net/wordle
-JWT_SECRET=your_secret_here
-```
-
----
-
-### 3. Create frontend config
+Im Ordner `frontend/` muss eine `config.js` erstellt werden:
 
 ```bash
-cd ../frontend
-cp config.example.js config.js
+cd ..\frontend
+copy config.example.js config.js
 ```
 
-#### Edit `config.js`
-
-##### Option 1 - Local backend
+Lokale Konfiguration:
 
 ```js
 window.API_BASE_URL = "http://localhost:5000";
 ```
 
-##### Option 2 - Your deployed backend
+### 6. MongoDB starten
 
-```js
-window.API_BASE_URL = "https://your-backend-url.onrender.com";
-```
+Wenn lokal entwickelt wird, muss MongoDB vor dem Backend verfügbar sein.
 
----
-
-### 4. Start MongoDB (only if using local DB)
-
-If you use MongoDB Atlas, skip this step.
+Beispiel unter Windows:
 
 ```bash
 net start MongoDB
 ```
 
-If you get a permission error, open powershell terminal as admin and run the command again.
+Alternativ kann eine externe MongoDB-Instanz oder MongoDB Atlas verwendet werden. In diesem Fall muss nur `MONGO_URI` angepasst werden.
 
----
-
-### 5. Install and run backend
+### 7. Backend starten
 
 ```bash
-cd ../backend
-npm install
+cd ..\backend
 npm start
 ```
 
----
+### 8. Anwendung öffnen
 
-## Tests
-
-The backend has 10 Jest unit tests covering `evaluateGuess`, `authMiddleware`, and `seedWords`. They only depend on the backend npm packages, and they do not require MongoDB because the database calls are mocked.
-
-Run them from `backend/`:
-
-```bash
-npm install
-npm test
-```
-
----
-
-### 6. Open the app in your browser:
+Nach erfolgreichem Start ist die Anwendung standardmässig unter folgender Adresse erreichbar:
 
 ```text
 http://localhost:5000
 ```
 
-## Successful Startup
+## Tests und Qualitätssicherung
 
-If the backend starts correctly, you should see something like this:
+### Unit-Tests
 
-```text
-MongoDB connected
-Seeded word list
-Server running on http://localhost:5000
+Die Unit-Tests prüfen zentrale Hilfsfunktionen und Middleware isoliert.
+
+Ausführung:
+
+```bash
+cd backend
+npm test
 ```
 
----
+### Integrationstests
 
-## MongoDB
+Die Integrationstests prüfen echte API-Abläufe gegen MongoDB, unter anderem:
 
-Collections are created automatically:
+- Registrierung und Login
+- Abruf des aktuellen Benutzers
+- Start eines Spiels
+- Speichern eines Resultats
+- Laden des Leaderboards
 
-- users
-- words
-- gameresults
+Die Tests sind so ausgelegt, dass `MONGO_URI` extern bereitgestellt werden muss. Für die containerisierte Ausführung existiert ein separates Test-Dockerfile:
 
-Word list is seeded on backend start.
+- [backend/Dockerfile.integration](backend/Dockerfile.integration)
 
----
+Lokale Beispielausführung mit Docker:
 
-## Important
-
-Do NOT commit:
-
-```text
-backend/.env
-frontend/config.js
+```bash
+docker run --detach --rm --name wordle-int-mongo -p 27017:27017 mongo:7
+docker build -f Dockerfile.integration -t wordle-backend-integration backend
+docker run --rm -e JWT_SECRET=integration-test-secret -e MONGO_URI=mongodb://host.docker.internal:27017/wordle_integration_test wordle-backend-integration
 ```
 
-Keep:
+### Linting und Formatprüfung
 
-```text
-backend/.env.example
-frontend/config.example.js
+```bash
+npm run lint
+npm run format:check
 ```
+
+## Pipeline / CI-Beschreibung
+
+Das Projekt verwendet GitHub Actions. Alle definierten Workflows können manuell gestartet werden und laufen zusätzlich bei jedem Push.
+
+### 1. `code-quality.yml`
+
+Zweck:
+
+- Installation der Root-Abhängigkeiten
+- Ausführung von ESLint
+- Prüfung der Formatierung mit Prettier
+
+Nutzen:
+
+- Verhindert stilistische und syntaktische Probleme frühzeitig
+
+### 2. `backend-tests.yml`
+
+Zweck:
+
+- Installation der Backend-Abhängigkeiten
+- Ausführung der Jest-Unit-Tests
+
+Nutzen:
+
+- Schnelle Rückmeldung zu Logikfehlern in isolierten Komponenten
+
+### 3. `integration-tests.yml`
+
+Zweck:
+
+- Start eines MongoDB-Service-Containers
+- Bauen eines dedizierten Test-Images mit `Dockerfile.integration`
+- Ausführung der Integrationstests innerhalb des Testcontainers
+
+Nutzen:
+
+- Realitätsnahe Prüfung der API gegen eine echte Datenbank
+- Saubere Trennung zwischen Testlogik und Testinfrastruktur
+
+### 4. `deploy.yml`
+
+Zweck:
+
+- Bauen von Docker Container (Frontend und Backend)
+- Pushen von Docker Container in GHCR
+- Triggern von Render Deploy Hook
+
+Nutzen:
+
+- Automatisiertes Deployment
+
+## Umgesetzte Zusatzleistungen
+
+Zusätzlich zur Basisanwendung wurden mehrere erweiterte Punkte umgesetzt:
+
+- `CI/CD Deplyoment mit GitHub Actions`: Automatisiertes Build und Deployment bei `Push` auf `main`.
+- `CI-Pipeline mit GitHub Actions`: Linting, Formatprüfung, Unit-Tests und Integrationstests werden bei jedem Push automatisiert ausgeführt.
+- `Einsatz von Container-Tool`: Verwendung von Docker für `Build and Deploy`und `Integrationstests`.
+- `Unit-Tests`: Wichtige Hilfsfunktionen und Middleware sind automatisiert getestet.
+- `Containerisierte Integrationstests`: Die API wird in einer isolierten Docker-Testumgebung gegen MongoDB geprüft.
+- `Task-Tracking mit Jira`: Aufgaben über Jira abgewickelt und GitHub eingebunden.
+- `Logging`: Sinnvolle Logs erstellt um die Appliaktion zu überwachen.
+- `JWT-Authentifizierung`: Authentifikation über JWT.
+- `Feature Branching`: Änderungen über Branches erstellt und über Pull Requests gemerged.
+
+### Umgesetzte Bonusleistungen
+
+- `Code Reviews`: Änderungen wurden über PR Code Reviews überprüft.
+
+## KI-Bewertung
+
+`Luca`:
+
+`Oguzhan`:
