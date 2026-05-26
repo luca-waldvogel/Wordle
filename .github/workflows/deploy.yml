@@ -21,20 +21,20 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: OgYYRe
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build backend image
-        run: docker build -t ghcr.io/ogyyre/wordle-backend:latest ./backend
+        run: docker build -t ghcr.io/luca-waldvogel/wordle-backend:latest ./backend
 
       - name: Push backend image
-        run: docker push ghcr.io/ogyyre/wordle-backend:latest
+        run: docker push ghcr.io/luca-waldvogel/wordle-backend:latest
 
       - name: Build frontend image
-        run: docker build -t ghcr.io/ogyyre/wordle-frontend:latest ./frontend
+        run: docker build -t ghcr.io/luca-waldvogel/wordle-frontend:latest ./frontend
 
       - name: Push frontend image
-        run: docker push ghcr.io/ogyyre/wordle-frontend:latest
+        run: docker push ghcr.io/luca-waldvogel/wordle-frontend:latest
 
       - name: Trigger backend deploy on Render
         run: curl -X POST ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK_URL }}
