@@ -281,7 +281,7 @@ Nutzen:
 
 Zusätzlich zur Basisanwendung wurden mehrere erweiterte Punkte umgesetzt:
 
-- `CI/CD Deplyoment mit GitHub Actions`: Automatisiertes Build und Deployment bei `Push` auf `main`.
+- `CI/CD Deployment mit GitHub Actions`: Automatisiertes Build und Deployment bei `Push` auf `main`.
 - `CI-Pipeline mit GitHub Actions`: Linting, Formatprüfung, Unit-Tests und Integrationstests werden bei jedem Push automatisiert ausgeführt.
 - `Einsatz von Container-Tool`: Verwendung von Docker für `Build and Deploy`und `Integrationstests`.
 - `Unit-Tests`: Wichtige Hilfsfunktionen und Middleware sind automatisiert getestet.
@@ -297,7 +297,7 @@ Zusätzlich zur Basisanwendung wurden mehrere erweiterte Punkte umgesetzt:
 
 ## KI-Bewertung
 
-`Luca`: Codex hat mir sehr geholfen bei der Umsetzung des Codes und den Workflows. Für die strukturierte Planung und und das Verständnis was genau umgesetzt werden soll, konnte die KI nur bedingt helfen. 
+`Luca`: Codex hat mir sehr geholfen bei der Umsetzung des Codes und den Workflows. Für die strukturierte Planung und und das Verständnis was genau umgesetzt werden soll, konnte die KI nur bedingt helfen.
 
 `Oguzhan`:
 KI hat mich beim Aufbau der Anwendung und bei der allgemeinen Strukturierung des Projekts gut unterstützt. Da ich zu Beginn viele Projektdetails und Anforderungen genau beschrieben habe, funktionierten Backend, Datenbankanbindung und grundlegende Features fast ohne grössere Überarbeitungen. Nach der Konfiguration der Verbindungen liefen MongoDB, API und Frontend grösstenteils stabil zusammen.
