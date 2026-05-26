@@ -58,6 +58,16 @@ MONGO_URI=mongodb://localhost:27017/wordle
 JWT_SECRET=your_secret_here
 ```
 
+JWT_SECRET can be any random string, it is used to sign the JWT tokens for authentication. For production, use a strong secret and keep it private.
+
+You can generate a secure secret with:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+```
+
+Run the command in your terminal and copy the output into the JWT_SECRET variable.
+
 ##### Option 2 - MongoDB Atlas (recommended)
 
 ```env
@@ -99,7 +109,7 @@ If you use MongoDB Atlas, skip this step.
 net start MongoDB
 ```
 
-If you get a permission error, open powershell as admin and run the command again.
+If you get a permission error, open powershell terminal as admin and run the command again.
 
 ---
 
