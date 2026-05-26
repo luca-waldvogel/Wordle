@@ -300,3 +300,15 @@ Zusätzlich zur Basisanwendung wurden mehrere erweiterte Punkte umgesetzt:
 `Luca`:
 
 `Oguzhan`:
+KI hat mich beim Aufbau der Anwendung und bei der allgemeinen Strukturierung des Projekts gut unterstützt. Da ich zu Beginn viele Projektdetails und Anforderungen genau beschrieben habe, funktionierten Backend, Datenbankanbindung und grundlegende Features fast ohne grössere Überarbeitungen. Nach der Konfiguration der Verbindungen liefen MongoDB, API und Frontend grösstenteils stabil zusammen.
+
+Weniger zuverlässig war die Unterstützung bei CI/CD- und Berechtigungsproblemen. Besonders bei GitHub Actions, GHCR und Deployment-Rechten entstanden mehrfach Probleme, weil die KI teilweise Annahmen getroffen hat, ohne genügend Kontext über Repository-Rechte, Secrets oder Owner-Konfigurationen zu haben. Dadurch mussten einige Fehler manuell und mehrfach analysiert und korrigiert werden.
+
+Trotzdem war die KI hilfreich bei:
+
+- der Strukturierung des Projekts
+- der Docker- und Deployment-Konfiguration
+- der Erstellung und Erklärung von GitHub Actions Workflows
+- der Fehlersuche bei CI/CD-Problemen
+- der Dokumentation und allgemeinen technischen Unterstützung
+- dem schnellen Finden möglicher Lösungsansätze
