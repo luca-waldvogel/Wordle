@@ -297,6 +297,6 @@ Zusätzlich zur Basisanwendung wurden mehrere erweiterte Punkte umgesetzt:
 
 ## KI-Bewertung
 
-`Luca`:
+`Luca`: Codex hat mir sehr geholfen bei der Umsetzung des Codes und den Workflows. Für die strukturierte Planung und und das Verständnis was genau umgesetzt werden soll, konnte die KI nur bedingt helfen. 
 
 `Oguzhan`:
